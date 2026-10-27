@@ -1,3 +1,4 @@
+window.DEV_MODE = true;
 import './styles/main.css';
 import { Engine } from './engine/Engine.js';
 
