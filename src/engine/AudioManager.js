@@ -7,12 +7,24 @@ export class AudioManager {
 
     this.musicVolume = 0.5;
     this.sfxVolume = 1.0;
+
+    // Web Audio API context for synthesized sounds
+    this.audioCtx = null;
+  }
+
+  initWebAudio() {
+    if (!this.audioCtx) {
+      const AudioContext = window.AudioContext || window.webkitAudioContext;
+      if (AudioContext) {
+        this.audioCtx = new AudioContext();
+      }
+    }
   }
 
   playMusic(url, fadeDuration = 1000) {
     if (this.musicAudio.src.includes(url)) {
       if (this.musicAudio.paused) {
-        this.musicAudio.play();
+        this.musicAudio.play().catch(e => console.warn("Audio autoplay prevented", e));
       }
       return;
     }
@@ -75,5 +87,30 @@ export class AudioManager {
     this.sfxAudio.src = url;
     this.sfxAudio.volume = this.sfxVolume;
     this.sfxAudio.play().catch(e => console.warn("SFX autoplay prevented", e));
+  }
+
+  playSynthesizedClick() {
+    this.initWebAudio();
+    if (!this.audioCtx) return;
+
+    if (this.audioCtx.state === 'suspended') {
+        this.audioCtx.resume();
+    }
+
+    const osc = this.audioCtx.createOscillator();
+    const gain = this.audioCtx.createGain();
+
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(800, this.audioCtx.currentTime);
+    osc.frequency.exponentialRampToValueAtTime(300, this.audioCtx.currentTime + 0.1);
+
+    gain.gain.setValueAtTime(0.5, this.audioCtx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.01, this.audioCtx.currentTime + 0.1);
+
+    osc.connect(gain);
+    gain.connect(this.audioCtx.destination);
+
+    osc.start();
+    osc.stop(this.audioCtx.currentTime + 0.1);
   }
 }

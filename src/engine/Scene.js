@@ -26,6 +26,9 @@ export class Scene {
       btn.className = 'choice-btn';
       btn.textContent = choice.text;
       btn.addEventListener('click', () => {
+        if (this.engine.audio && this.engine.audio.playSynthesizedClick) {
+          this.engine.audio.playSynthesizedClick();
+        }
         if (choice.action) {
           choice.action();
         }
@@ -54,14 +57,14 @@ export class Scene {
     const layers = this.element.querySelectorAll('[data-depth]');
     if (layers.length === 0) return;
 
-    // Use deviceorientation for mobile, mousemove for desktop
+    this.deviceOrientationListenerAdded = false;
+
     this._parallaxHandler = (e) => {
       let relX, relY;
 
       if (e.type === 'deviceorientation') {
-        // Clamp gamma and beta to reasonable ranges for parallax
-        const gamma = Math.min(Math.max(e.gamma, -45), 45); // Left/Right tilt
-        const beta = Math.min(Math.max(e.beta - 45, -45), 45); // Front/Back tilt (adjusted for typical holding angle)
+        const gamma = Math.min(Math.max(e.gamma, -45), 45);
+        const beta = Math.min(Math.max(e.beta - 45, -45), 45);
 
         relX = gamma / 45;
         relY = beta / 45;
@@ -76,7 +79,6 @@ export class Scene {
 
       layers.forEach(layer => {
         const depth = parseFloat(layer.getAttribute('data-depth')) || 0;
-        // higher depth = moves more
         const moveX = relX * depth * 50;
         const moveY = relY * depth * 50;
 
@@ -85,7 +87,26 @@ export class Scene {
     };
 
     window.addEventListener('mousemove', this._parallaxHandler);
-    window.addEventListener('deviceorientation', this._parallaxHandler);
+
+    // Request permission for device orientation on iOS 13+
+    if (typeof DeviceOrientationEvent !== 'undefined' && typeof DeviceOrientationEvent.requestPermission === 'function') {
+      // Must be triggered by a user gesture. We'll attach it to a click event on the document once
+      this._enableOrientation = () => {
+        DeviceOrientationEvent.requestPermission()
+          .then(permissionState => {
+            if (permissionState === 'granted') {
+              window.addEventListener('deviceorientation', this._parallaxHandler);
+              this.deviceOrientationListenerAdded = true;
+            }
+          })
+          .catch(console.error);
+        document.removeEventListener('click', this._enableOrientation);
+      };
+      document.addEventListener('click', this._enableOrientation);
+    } else {
+      window.addEventListener('deviceorientation', this._parallaxHandler);
+      this.deviceOrientationListenerAdded = true;
+    }
   }
 
   onEnter() {
@@ -95,7 +116,12 @@ export class Scene {
   destroy() {
     if (this._parallaxHandler) {
       window.removeEventListener('mousemove', this._parallaxHandler);
-      window.removeEventListener('deviceorientation', this._parallaxHandler);
+      if (this.deviceOrientationListenerAdded) {
+         window.removeEventListener('deviceorientation', this._parallaxHandler);
+      }
+    }
+    if (this._enableOrientation) {
+        document.removeEventListener('click', this._enableOrientation);
     }
     this.element.remove();
   }
