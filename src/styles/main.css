@@ -71,6 +71,30 @@ body, html {
   20%, 24%, 55% { opacity: 0.1; }
 }
 
+/* Multi-layered Scrolling Animations */
+@keyframes side-scroll {
+  from { background-position: 0 50%; }
+  to { background-position: -100vw 50%; }
+}
+
+@keyframes forward-scroll {
+  from { transform: scale(1) translateZ(0); opacity: 0; }
+  20% { opacity: 1; }
+  80% { opacity: 1; }
+  to { transform: scale(3) translateZ(500px); opacity: 0; }
+}
+
+@keyframes vertical-scroll {
+  from { background-position: 50% 0; }
+  to { background-position: 50% -100vh; }
+}
+
+@keyframes door-open {
+  0% { transform: perspective(1200px) rotateY(0deg); transform-origin: left; }
+  100% { transform: perspective(1200px) rotateY(-90deg); transform-origin: left; }
+}
+
+/* Cinematic Utilities */
 .cinematic-pan {
   animation: slow-pan-right 20s linear infinite alternate;
 }
@@ -81,6 +105,95 @@ body, html {
 
 .flicker {
   animation: neon-flicker 4s infinite alternate;
+}
+
+.side-scroll-fast {
+  animation: side-scroll 3s linear infinite;
+  background-repeat: repeat-x;
+}
+
+.side-scroll-med {
+  animation: side-scroll 6s linear infinite;
+  background-repeat: repeat-x;
+}
+
+.side-scroll-slow {
+  animation: side-scroll 12s linear infinite;
+  background-repeat: repeat-x;
+}
+
+.forward-scroll-layer {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background-size: cover;
+  background-position: center;
+  animation: forward-scroll 10s linear infinite;
+  will-change: transform, opacity;
+}
+
+/* Stagger forward scroll layers for continuous effect */
+.forward-delay-1 { animation-delay: -3.33s; }
+.forward-delay-2 { animation-delay: -6.66s; }
+
+.vertical-scroll-fast {
+  animation: vertical-scroll 4s linear infinite;
+  background-repeat: repeat-y;
+}
+.vertical-scroll-slow {
+  animation: vertical-scroll 10s linear infinite;
+  background-repeat: repeat-y;
+}
+
+.door-opening {
+  animation: door-open 4s ease-in-out forwards;
+}
+
+/* Cinematic Scene UI Updates */
+.cinematic-ui {
+  justify-content: flex-end;
+  padding-bottom: 4rem;
+}
+
+.cinematic-dialog.hidden {
+  opacity: 0;
+  transform: translateY(20px);
+  pointer-events: none;
+}
+
+.cinematic-dialog.visible {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 1s ease, transform 1s ease;
+}
+
+.type-effect {
+  overflow: hidden; /* Ensures the content is not revealed until the animation */
+  border-right: .15em solid var(--neon-blue); /* The typwriter cursor */
+  white-space: pre-wrap; /* Keeps formatting */
+  margin: 0 auto; /* Gives that scrolling effect as the typing happens */
+  letter-spacing: .05em; /* Adjust as needed */
+  animation:
+    typing 2s steps(40, end),
+    blink-caret .75s step-end infinite;
+}
+
+@keyframes typing {
+  from { max-width: 0 }
+  to { max-width: 100% }
+}
+
+@keyframes blink-caret {
+  from, to { border-color: transparent }
+  50% { border-color: var(--neon-blue); }
+}
+
+.fade-in {
+  animation: fadeIn 2s ease forwards;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
 /* UI Elements */
