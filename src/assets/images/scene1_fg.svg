@@ -1,6 +1,1 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1080">
-        <rect width="100%" height="100%" fill="transparent" />
-        <circle cx="960" cy="540" r="300" fill="#ff00ea" opacity="0.8"/>
-        <rect x="384" y="648" width="400" height="600" fill="#ff00ea" opacity="0.6"/>
-        <rect x="1344" y="432" width="200" height="800" fill="#ff00ea" opacity="0.7"/>
-    </svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080" preserveAspectRatio="xMidYMid slice"><rect x="-100" y="700" width="500" height="400" fill="#000" opacity="0.95" /><rect x="-90" y="760" width="480" height="10" fill="#00f3ff" opacity="0.8" /><rect x="1600" y="600" width="400" height="500" fill="#050010" opacity="0.95" /><rect x="1610" y="620" width="380" height="10" fill="#00f3ff" opacity="0.8" /><rect x="1610" y="660" width="380" height="10" fill="#00f3ff" opacity="0.8" /><rect x="200" y="750" width="200" height="50" fill="#00f3ff" opacity="0.9" /><text x="300" y="780" font-family="monospace" font-size="20" fill="#fff" text-anchor="middle" font-weight="bold">NOODLES</text></svg>
