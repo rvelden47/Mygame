@@ -1,22 +1,32 @@
 import { Scene } from '../engine/Scene.js';
 
-import bgUrl from '../assets/images/scene1_bg.svg';
-import midUrl from '../assets/images/scene1_mid.svg';
-import fgUrl from '../assets/images/scene1_fg.svg';
+import bgUrl from '../assets/images/real_city_bg.jpg';
+import fgUrl from '../assets/images/real_neon_sign.png'; // We use this as an overlay
 
 export class Scene1 extends Scene {
   async render() {
     this.element.innerHTML = `
-      <!-- Parallax Layers -->
-      <div class="parallax-layer" data-depth="0.1" style="background-image: url('${bgUrl}')"></div>
-      <div class="parallax-layer" data-depth="0.3" style="background-image: url('${midUrl}')"></div>
-      <div class="parallax-layer" data-depth="0.7" style="background-image: url('${fgUrl}')"></div>
+      <!-- Cinematic Background -->
+      <div class="parallax-layer cinematic-zoom" data-depth="0.1" style="background-image: url('${bgUrl}')"></div>
+
+      <!-- Neon overlay to add depth and flicker -->
+      <div class="parallax-layer flicker" data-depth="0.3" style="
+        background-image: url('${fgUrl}');
+        background-size: contain;
+        background-repeat: no-repeat;
+        background-position: right top;
+        opacity: 0.6;
+        mix-blend-mode: screen;
+      "></div>
 
       <!-- UI Layer -->
       <div class="ui-layer" id="ui-container"></div>
     `;
 
     const ui = this.element.querySelector('#ui-container');
+
+    // We want the user to take in the cinematic view for 4 seconds before the text appears
+    this.showUIAfterDelay(ui, 4000);
 
     const narrative = "Rain slicked the neon streets of Sector 4. The target was close. You feel the weight of the data drive in your pocket. It's time to move.";
     ui.appendChild(this.createDialogUI(narrative));

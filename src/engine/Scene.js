@@ -9,6 +9,14 @@ export class Scene {
     return this.element;
   }
 
+  showUIAfterDelay(uiContainer, delayMs) {
+    uiContainer.style.opacity = '0';
+    uiContainer.style.transition = 'opacity 2s ease-in-out';
+    setTimeout(() => {
+      uiContainer.style.opacity = '1';
+    }, delayMs);
+  }
+
   createChoicesUI(choices) {
     const choicesContainer = document.createElement('div');
     choicesContainer.className = 'choices-container';
