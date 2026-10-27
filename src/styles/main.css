@@ -313,3 +313,73 @@ body, html {
   z-index: 99999 !important;
   pointer-events: auto !important;
 }
+
+/* ====== CONTINUOUS SCROLLING SCENE ====== */
+
+.travel-scene-container {
+  position: absolute;
+  top: 0; left: 0; width: 100vw; height: 100vh;
+  overflow: hidden;
+}
+
+/* Layer backgrounds that repeat horizontally */
+.scroll-layer {
+  position: absolute;
+  top: 0; left: 0;
+  width: 200%; /* Important for infinite scroll */
+  height: 100%;
+  background-size: 50% 100%; /* so it fits exactly twice */
+  background-repeat: repeat-x;
+  will-change: transform;
+}
+
+.scroll-bg {
+  z-index: 1;
+  background-image: url('../assets/images/scroll/bg_city.jpg');
+  animation: scroll-infinite 60s linear infinite;
+  filter: brightness(0.4);
+}
+
+.scroll-mg {
+  z-index: 2;
+  background-image: url('../assets/images/scroll/mg_buildings.jpg');
+  animation: scroll-infinite 30s linear infinite;
+  filter: brightness(0.6);
+  /* Optional: Masking to make it transparent at top so bg shows */
+  -webkit-mask-image: linear-gradient(to bottom, transparent 20%, black 50%);
+  mask-image: linear-gradient(to bottom, transparent 20%, black 50%);
+}
+
+.scroll-fg {
+  z-index: 3;
+  background-image: url('../assets/images/scroll/fg_street.jpg');
+  animation: scroll-infinite 10s linear infinite;
+  filter: brightness(0.8);
+  -webkit-mask-image: linear-gradient(to bottom, transparent 60%, black 80%);
+  mask-image: linear-gradient(to bottom, transparent 60%, black 80%);
+}
+
+.travel-vehicle {
+  position: absolute;
+  z-index: 4;
+  left: 20%;
+  top: 40%;
+  width: 30vw;
+  height: 30vh;
+  background-image: url('../assets/images/scroll/car_flying.jpg');
+  background-size: cover;
+  background-position: center;
+  border-radius: 50%; /* Fake a ship shape for now if it's not transparent */
+  box-shadow: 0 0 20px cyan;
+  animation: bob-up-down 3s ease-in-out infinite alternate;
+}
+
+@keyframes scroll-infinite {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+@keyframes bob-up-down {
+  0% { transform: translateY(-10px) rotate(-1deg); }
+  100% { transform: translateY(10px) rotate(1deg); }
+}

@@ -57,7 +57,12 @@ export class Scene1 extends CinematicScene {
     this.choices = [
       {
         text: "Land the car and proceed on foot",
-        action: () => { this.engine.audio.playMusic('/src/assets/audio/cyberpunk-city.ogg'); this.engine.loadScene('scene2'); }
+        action: () => {
+          import('../assets/audio/cyberpunk-city.mp3').then(mod => {
+            this.engine.audio.playMusic(mod.default);
+          });
+          this.engine.loadScene('scene2');
+        }
       }
     ];
   }
