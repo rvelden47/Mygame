@@ -1,6 +1,6 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1080">
-        <rect width="100%" height="100%" fill="#050510" />
-        <circle cx="960" cy="540" r="300" fill="#101030" opacity="0.8"/>
-        <rect x="384" y="648" width="400" height="600" fill="#101030" opacity="0.6"/>
-        <rect x="1344" y="432" width="200" height="800" fill="#101030" opacity="0.7"/>
-    </svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080" preserveAspectRatio="xMidYMid slice"><rect width="100%" height="100%" fill="url(#bg-grad)" /><defs>
+            <linearGradient id="bg-grad" x1="0%" y1="0%" x2="0%" y2="100%">
+                <stop offset="0%" stop-color="#0a0515" />
+                <stop offset="100%" stop-color="#1a0a2a" />
+            </linearGradient>
+        </defs><path d="M0 800 Q 960 700 1920 800" stroke="#00f3ff" stroke-width="2" fill="none" opacity="0.3"/><path d="M0 900 Q 960 850 1920 900" stroke="#00f3ff" stroke-width="3" fill="none" opacity="0.5"/><rect x="100" y="300" width="300" height="800" fill="#050510" opacity="1" /><rect x="1500" y="200" width="400" height="900" fill="#0a0a1a" opacity="1" /><rect x="1510" y="220" width="380" height="10" fill="#fff" opacity="0.8" /><rect x="1510" y="300" width="380" height="10" fill="#fff" opacity="0.8" /></svg>

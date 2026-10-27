@@ -46,15 +46,25 @@ export class Scene {
     const layers = this.element.querySelectorAll('[data-depth]');
     if (layers.length === 0) return;
 
+    // Use deviceorientation for mobile, mousemove for desktop
     this._parallaxHandler = (e) => {
-      const mouseX = e.clientX;
-      const mouseY = e.clientY;
+      let relX, relY;
 
-      const width = window.innerWidth;
-      const height = window.innerHeight;
+      if (e.type === 'deviceorientation') {
+        // Clamp gamma and beta to reasonable ranges for parallax
+        const gamma = Math.min(Math.max(e.gamma, -45), 45); // Left/Right tilt
+        const beta = Math.min(Math.max(e.beta - 45, -45), 45); // Front/Back tilt (adjusted for typical holding angle)
 
-      const relX = (mouseX - width / 2) / width;
-      const relY = (mouseY - height / 2) / height;
+        relX = gamma / 45;
+        relY = beta / 45;
+      } else {
+        const mouseX = e.clientX;
+        const mouseY = e.clientY;
+        const width = window.innerWidth;
+        const height = window.innerHeight;
+        relX = (mouseX - width / 2) / width;
+        relY = (mouseY - height / 2) / height;
+      }
 
       layers.forEach(layer => {
         const depth = parseFloat(layer.getAttribute('data-depth')) || 0;
@@ -67,6 +77,7 @@ export class Scene {
     };
 
     window.addEventListener('mousemove', this._parallaxHandler);
+    window.addEventListener('deviceorientation', this._parallaxHandler);
   }
 
   onEnter() {
@@ -76,6 +87,7 @@ export class Scene {
   destroy() {
     if (this._parallaxHandler) {
       window.removeEventListener('mousemove', this._parallaxHandler);
+      window.removeEventListener('deviceorientation', this._parallaxHandler);
     }
     this.element.remove();
   }
