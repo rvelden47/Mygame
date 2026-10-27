@@ -1,17 +1,32 @@
 import { CinematicScene } from '../engine/CinematicScene.js';
 import alleyUrl from '../assets/images/alley.jpg';
-import noodleExtUrl from '../assets/images/noodle_bar_ext.jpg';
-import thugsUrl from '../assets/images/thugs.jpg';
+import bgCityUrl from '../assets/images/scroll/bg_city.jpg';
+import mgBuildingsUrl from '../assets/images/scroll/mg_buildings.jpg';
+import fgStreetUrl from '../assets/images/scroll/fg_street.jpg';
+import carFlyingUrl from '../assets/images/scroll/car_flying.jpg';
 
 export class Scene2 extends CinematicScene {
   constructor(engine) {
     super(engine);
-    // 1.5-minute scene
-    this.duration = 90000;
+    // 1-minute scene
+    this.duration = 60000;
 
     this.shots = [
         {
             time: 0,
+            html: `
+            <div class="travel-scene-container">
+                <div class="scroll-layer scroll-bg" style="background-image: url('${bgCityUrl}');"></div>
+                <div class="scroll-layer scroll-mg" style="background-image: url('${mgBuildingsUrl}');"></div>
+                <div class="scroll-layer scroll-fg" style="background-image: url('${fgStreetUrl}');"></div>
+                <div class="travel-vehicle" style="background-image: url('${carFlyingUrl}');"></div>
+                <!-- Vignette -->
+                <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; box-shadow: inset 0 0 150px rgba(0,0,0,1); pointer-events: none; z-index: 5;"></div>
+            </div>
+            `
+        },
+        {
+            time: 30000,
             html: `
             <!-- Simulating forward walking through an alley using staggered forward-scroll -->
             <div class="forward-scroll-layer" style="background-image: url('${alleyUrl}');"></div>
@@ -20,37 +35,19 @@ export class Scene2 extends CinematicScene {
             <!-- Vignette for deep alley feel -->
             <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; box-shadow: inset 0 0 150px rgba(0,0,0,1); pointer-events: none;"></div>
             `
-        },
-        {
-            time: 45000,
-            html: `
-            <div class="parallax-animated-wrapper shot-pan-left">
-                <div class="parallax-layer" data-depth="0.3" style="background-image: url('${noodleExtUrl}'); filter: saturate(1.5);"></div>
-                <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; box-shadow: inset 0 0 150px rgba(0,0,0,0.8); pointer-events: none;"></div>
-            </div>
-            `
-        },
-        {
-            time: 70000,
-            html: `
-            <div class="parallax-animated-wrapper cinematic-zoom">
-                <div class="parallax-layer" data-depth="0.6" style="background-image: url('${thugsUrl}'); filter: contrast(1.2) sepia(0.3);"></div>
-                <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; box-shadow: inset 0 0 150px rgba(0,0,0,1); pointer-events: none;"></div>
-            </div>
-            `
         }
     ];
 
     this.timeline = [
-      { time: 1000, text: "The hover-car is hidden. I'm on foot now." },
-      { time: 20000, text: "Walking down the alleyway towards the Noodle Bar. The stench of synthetic pork and ozone is thick." },
-      { time: 45000, text: "I can see the neon sign flickering ahead. 'Lucky Dragon'." },
-      { time: 70000, text: "Two thugs are standing by the side entrance. They look like they're waiting for someone." }
+      { time: 1000, text: "I hit the accelerator. The hover-car screams into the neon sky." },
+      { time: 15000, text: "The city blurrs beneath me. Levels passing in seconds. Megacorps above, rot below." },
+      { time: 30000, text: "Landed near the Noodle Bar. The hover-car is hidden. I'm on foot now." },
+      { time: 45000, text: "Walking down the alleyway. The stench of synthetic pork and ozone is thick." }
     ];
 
     this.choices = [
       {
-        text: "Sneak past them to the back door",
+        text: "Sneak past the guards to the back door",
         action: () => this.engine.loadScene('scene3')
       },
       {
